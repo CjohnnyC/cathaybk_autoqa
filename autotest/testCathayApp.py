@@ -3,7 +3,7 @@ from appium import webdriver
 from pathlib import Path
 from time import sleep
 
-#Slef defined configuration and page object
+#Self defined configuration and page object
 from appConfig import CAPS
 from pageElement import PageElement
 
@@ -12,7 +12,6 @@ from selfFunctions import NTIME, screenshot, is_exist
 
 class TestCathayApp:
 
-    #Fixture start
     @classmethod
     def setup_class(cls):
         cls.driver=webdriver.Remote("http://localhost:4723/wd/hub", CAPS)
