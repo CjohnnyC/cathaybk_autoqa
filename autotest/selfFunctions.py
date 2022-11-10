@@ -1,3 +1,4 @@
+from appium.webdriver.common.touch_action import TouchAction
 from datetime import datetime
 
 NTIME=datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -14,6 +15,10 @@ def is_exist(page_element):
 def screenshot(driver):
     driver.get_screenshot_as_file("./screenshot/homepage_"+NTIME+".png")
 
+def scroll_el1_to_el2(driver, el1, el2):
+    TouchAction(driver).press(el1).move_to(el2).release().perform()
+
+'''
 def get_size(driver):
     x=driver.get_window_size()["width"]
     y=driver.get_window_size()['height']
@@ -32,3 +37,4 @@ def swipe_left_right(driver,x1,x2,y,t):
     x2=int(s[0]*x2)
     y=int(s[1]*y)
     driver.swipe(x1,y,x2,y,t)
+'''
