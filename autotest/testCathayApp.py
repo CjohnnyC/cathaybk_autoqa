@@ -8,16 +8,15 @@ from appConfig import CAPS
 from pageElement import PageElement
 
 #Self defined functions
-from selfFunctions import NTIME, screenshot, is_exist
+from selfFunctions import *
 
 class TestCathayApp:
 
     @classmethod
     def setup_class(cls):
         cls.driver=webdriver.Remote("http://localhost:4723/wd/hub", CAPS)
-        cls.driver.implicitly_wait(10)
+        cls.driver.implicitly_wait(10) #We can also use WebDriverWait to each element, or set sleep.
         cls.pe=PageElement(cls.driver)
-        #We also can use WebDriverWait to each element, or set sleep.
 
     @classmethod
     def teardown_class(cls): 
@@ -39,24 +38,29 @@ class TestCathayApp:
         self.pe.menu().click()
         self.pe.prod_intro().click()
         self.pe.credit_card().click()
-        self.driver.scroll(self.pe.credit_card_list[0], self.pe.credit_card_list[7])
+        scroll_el1_to_el2(self.driver, self.pe.credit_card_list[0], self.pe.credit_card_list[7])
         screenshot(self.driver)
         count=len(self.pe.credit_card_list)
         assert count==8 #Confirm credit card list has 8 subfunctions
 
     def test3_deadcard_type(self):
-        self.driver.scroll(self.pe.credit_card_list[7], self.pe.credit_card_list[0])
+        scroll_el1_to_el2(self.driver, self.pe.credit_card_list[7], self.pe.credit_card_list[0])
         self.pe.card_intro().click()
-        self.driver.scroll(self.pe.recmd_card(), self.pe.dead_card())
+        scroll_el1_to_el2(self.driver, self.pe.recmd_card(), self.pe.dead_card())
         self.pe.dead_card().click()
         screenshot_count=0
-        for d in self.pe.dead_card_group:
+        d=self.pe.dead_card_group
+        for i in range(len(d)):
             sleep(3)
             screenshot(self.driver)
             screenshot_count+=1
-            self.driver.scroll(d, d+1)
-        assert screenshot_count==len(self.pe.dead_card_group) #Confirm screenshot num equal to dead card num
+            if i<len(d)-1:
+                scroll_el1_to_el2(self.driver, d[i], d[i+1]) #TouchAction scroll to next card
+            else:
+                break
+        assert screenshot_count==len(d) #Confirm screenshot num equal to dead card num
 
 if __name__=="__main__":
     html_report=str(Path.cwd()/Path("report/result_"+NTIME+".html"))
     pytest.main(["-s", "-v", ".", "--html="+html_report])
+    #export html report
