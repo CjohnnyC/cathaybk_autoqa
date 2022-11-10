@@ -5,9 +5,6 @@ class PageElement:
     def __init__(self, driver):
         self.driver=driver
 
-    def search(self):
-        return self.driver.find_element(By.XPATH,"//input[@class='gLFyf']")
-
     def login(self):
         return self.driver.find_element(By.XPATH, "//input[@id='lblLoginText']")
     
