@@ -38,18 +38,18 @@ class TestCathayApp:
         self.pe.menu().click()
         self.pe.prod_intro().click()
         self.pe.credit_card().click()
-        scroll_el1_to_el2(self.driver, self.pe.credit_card_list[0], self.pe.credit_card_list[7])
+        scroll_el1_to_el2(self.driver, self.pe.credit_card_list()[0], self.pe.credit_card_list()[7])
         screenshot(self.driver)
-        count=len(self.pe.credit_card_list)
+        count=len(self.pe.credit_card_list())
         assert count==8 #Confirm credit card list has 8 subfunctions
 
     def test3_deadcard_type(self):
-        scroll_el1_to_el2(self.driver, self.pe.credit_card_list[7], self.pe.credit_card_list[0])
+        scroll_el1_to_el2(self.driver, self.pe.credit_card_list()[7], self.pe.credit_card_list()[0])
         self.pe.card_intro().click()
         scroll_el1_to_el2(self.driver, self.pe.recmd_card(), self.pe.dead_card())
         self.pe.dead_card().click()
         screenshot_count=0
-        d=self.pe.dead_card_group
+        d=self.pe.dead_card_group()
         for i in range(len(d)):
             sleep(3)
             screenshot(self.driver)
