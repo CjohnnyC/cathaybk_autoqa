@@ -1,5 +1,6 @@
 import pytest
 from appium import webdriver
+from appium.webdriver.common.touch_action import TouchAction
 from pathlib import Path
 from time import sleep
 
@@ -17,6 +18,7 @@ class TestCathayApp:
         cls.driver=webdriver.Remote("http://localhost:4723/wd/hub", CAPS)
         cls.driver.implicitly_wait(10) #We can also use WebDriverWait to each element, or set sleep.
         cls.pe=PageElement(cls.driver)
+        cls.actions=TouchAction(cls.driver)
 
     @classmethod
     def teardown_class(cls): 
@@ -38,27 +40,28 @@ class TestCathayApp:
         self.pe.menu().click()
         self.pe.prod_intro().click()
         self.pe.credit_card().click()
-        scroll_el1_to_el2(self.driver, self.pe.credit_card_list()[0], self.pe.credit_card_list()[7])
+        ccl=self.pe.credit_card_list()
+        scroll_el1_to_el2(self.actions, ccl[0], ccl[7]) #scroll from card intro to apply credit card
         screenshot(self.driver)
-        count=len(self.pe.credit_card_list())
-        assert count==8 #Confirm credit card list has 8 subfunctions
+        assert len(ccl)==8 #Confirm credit card list has 8 subfunctions
 
     def test3_deadcard_type(self):
-        scroll_el1_to_el2(self.driver, self.pe.credit_card_list()[7], self.pe.credit_card_list()[0])
-        self.pe.card_intro().click()
-        scroll_el1_to_el2(self.driver, self.pe.recmd_card(), self.pe.dead_card())
+        ccl=self.pe.credit_card_list()
+        scroll_el1_to_el2(self.actions, ccl[7], ccl[0]) #scroll from apply credit card back to card intro
+        ccl[0].click() #click card intro
+        scroll_el1_to_el2(self.actions, self.pe.recmd_card(), self.pe.dead_card())
         self.pe.dead_card().click()
         screenshot_count=0
-        d=self.pe.dead_card_group()
-        for i in range(len(d)):
+        dcg=self.pe.dead_card_group()
+        for i in range(len(dcg)):
             sleep(3)
             screenshot(self.driver)
             screenshot_count+=1
-            if i<len(d)-1:
-                scroll_el1_to_el2(self.driver, d[i], d[i+1]) #TouchAction scroll to next card
+            if i<len(dcg)-1:
+                scroll_el1_to_el2(self.actions, dcg[i], dcg[i+1]) #TouchAction scroll to next card
             else:
                 break
-        assert screenshot_count==len(d) #Confirm screenshot num equal to dead card num
+        assert screenshot_count==len(dcg) #Confirm screenshot num equal to dead card num
 
 if __name__=="__main__":
     html_report=str(Path.cwd()/Path("report/result_"+NTIME+".html"))
