@@ -18,8 +18,22 @@ class PageElement:
         return self.driver.find_element(By.XPATH, "//div[@class='cubre-a-menuSortBtn'][text()='信用卡']")
 
     def credit_card_list(self):
+        ccl=[]
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='卡片介紹']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='刷卡優惠']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='小樹點(信用卡)']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='卡友登錄專區']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='卡友理財服務']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='卡友權益']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='行動支付']"))
+        ccl.append(self.driver.find_element(By.XPATH, "//a[text()='申請信用卡']"))
+        return ccl
+
+    '''
+    def credit_card_list(self):
         all_list=self.driver.find_elements(By.XPATH, "//a[@class='cubre-a-menuLink']")
         return all_list[4:12] #4~11th is for credit card list
+    '''
 
     def card_intro(self):
         return self.driver.find_element(By.XPATH, "//a[text()='卡片介紹']")
