@@ -38,7 +38,7 @@ class PageElement:
     def card_intro(self):
         return self.driver.find_element(By.XPATH, "//a[text()='卡片介紹']")
 
-    def recmd_card(self):
+    def rcmd_card(self):
         return self.driver.find_element(By.XPATH, "//p[text()='推薦卡片']")
 
     def dead_card(self):
