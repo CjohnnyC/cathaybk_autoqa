@@ -33,21 +33,21 @@ class TestCathayApp:
     def test1_homepage(self):
         self.driver.get("https://www.cathaybk.com.tw/cathaybk/")
         self.getPage=is_exist(self.pe.login()) #other page elements AND logic should be True
-        NTIME=datetime.now().strftime("%Y%m%d_%H%M%S")
-        homepage=file_path("./screenshot/homepage", "homepage_"+NTIME+".png")
-        self.driver.get_screenshot_as_file(homepage)
+        NTIME=datetime.now().strftime(TIME_FORMAT)
+        screenshot(self.driver, "./screenshot/homepage", "homepage_"+NTIME+".png")
         assert self.getPage is True #Confirm homepage displayed
 
     def test2_credit_card_list(self):
         self.pe.menu().click()
         self.pe.prod_intro().click()
         self.pe.credit_card().click()
+        NTIME=datetime.now().strftime(TIME_FORMAT)
+        screenshot(self.driver, "./screenshot/cardlist", "top_"+NTIME+".png")
         ccl=self.pe.credit_card_list()
         self.driver.drag_and_drop(ccl[0], ccl[7])
         #scroll_el1_to_el2(self.actions, ccl[0], ccl[7]) #TochAction not work on H5 page
-        NTIME=datetime.now().strftime("%Y%m%d_%H%M%S")
-        cardlist=file_path("./screenshot/cardlist", "cardlist_"+NTIME+".png")
-        self.driver.get_screenshot_as_file(cardlist)
+        NTIME=datetime.now().strftime(TIME_FORMAT)
+        screenshot(self.driver, "./screenshot/cardlist", "bottom_"+NTIME+".png")
         assert len(ccl)==8 #Confirm credit card list has 8 subfunctions
 
     def test3_deadcard_type(self):
@@ -60,9 +60,8 @@ class TestCathayApp:
         dcg=self.pe.dead_card_group()
         for i in range(len(dcg)):
             sleep(3)
-            NTIME=datetime.now().strftime("%Y%m%d_%H%M%S")
-            cardgroup=file_path("./screenshot/cardgroup", "cardgroup_"+NTIME+".png")
-            self.driver.get_screenshot_as_file(cardgroup)
+            NTIME=datetime.now().strftime(TIME_FORMAT)
+            screenshot(self.driver, "./screenshot/cardgroup", str(i+1)+"_"+NTIME+".png")
             screenshot_count+=1
             if i<len(dcg)-1:
                 self.driver.drag_and_drop(dcg[i], dcg[i+1])
@@ -71,7 +70,7 @@ class TestCathayApp:
         assert screenshot_count==len(dcg) #Confirm screenshot num equal to dead card num
 
 if __name__=="__main__":
-    NTIME=datetime.now().strftime("%Y%m%d_%H%M%S")
+    NTIME=datetime.now().strftime(TIME_FORMAT)
     html_report=file_path("./report", "result_"+NTIME+".html")
     pytest.main(["-s", "-v", ".", "--html="+html_report])
     #export html report
