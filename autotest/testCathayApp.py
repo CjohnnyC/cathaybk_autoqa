@@ -54,7 +54,7 @@ class TestCathayApp:
         ccl=self.pe.credit_card_list()
         self.driver.drag_and_drop(ccl[7], ccl[0])
         ccl[0].click() #click card intro
-        self.driver.drag_and_drop(self.pe.recmd_card(), self.pe.dead_card())
+        self.driver.drag_and_drop(self.pe.rcmd_card(), self.pe.dead_card())
         self.pe.dead_card().click()
         screenshot_count=0
         dcg=self.pe.dead_card_group()
