@@ -1,6 +1,8 @@
-from datetime import datetime
+from pathlib import Path
 
-NTIME=datetime.now().strftime("%Y%m%d_%H%M%S")
+#NTIME=datetime.now().strftime("%Y%m%d_%H%M%S") 
+#Above NTIME need to call each time, can not package it or the time will be the same
+TIME_FORMAT="%Y%m%d_%H%M%S"
 
 def is_exist(page_element):
     flag=True
@@ -11,14 +13,19 @@ def is_exist(page_element):
         flag=False
         return flag
 
-def screenshot(driver):
-    driver.get_screenshot_as_file("./screenshot/homepage_"+NTIME+".png")
+def file_path(dir, file):
+    Path(dir).mkdir(parents=True, exist_ok=True) 
+    wholepath=Path(dir)/Path(file)
+    return str(wholepath)
 
-def scroll_el1_to_el2(actions, el1, el2):
-    actions.press(el1).move_to(el2).release().perform()
+def screenshot(driver ,dir, file):
+    driver.get_screenshot_as_file(file_path(dir, file))
 
 
 '''
+def scroll_el1_to_el2(actions, el1, el2):
+    actions.press(el1).move_to(el2).release().perform()
+
 def get_size(driver):
     x=driver.get_window_size()["width"]
     y=driver.get_window_size()['height']
