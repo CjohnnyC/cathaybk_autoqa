@@ -18,14 +18,20 @@ def file_path(dir, file):
     wholepath=Path(dir)/Path(file)
     return str(wholepath)
 
-def screenshot(driver ,dir, file):
+def screenshot(driver, dir, file):
     driver.get_screenshot_as_file(file_path(dir, file))
+
+def swipe_card(driver, card_x, card_width, card_y):
+    scroll_x=card_x+card_width
+    driver.swipe(scroll_x, card_y, 0, card_y)
 
 
 '''
 def scroll_el1_to_el2(actions, el1, el2):
     actions.press(el1).move_to(el2).release().perform()
+'''
 
+'''
 def get_size(driver):
     x=driver.get_window_size()["width"]
     y=driver.get_window_size()['height']
