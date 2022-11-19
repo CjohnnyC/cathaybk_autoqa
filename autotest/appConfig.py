@@ -2,7 +2,7 @@ CAPS = {
     "deviceName": "Android Emulator",
     "platformName": "Android",
     "platformVersion": "12",
-    "automationName": "Appium",
+    "automationName": "UIAutomator2",
     "browserName": "Chrome",
     "unicodeKeyboard": True,
     "resetKeyboard": True,
