@@ -47,22 +47,29 @@ class TestCathayApp:
         screenshot(self.driver, "./screenshot/cardlist", "top_"+NTIME+".png")
         
         ccl=self.pe.credit_card_list()
-        self.driver.scroll(ccl[7], ccl[0])
+        self.driver.execute_script("arguments[0].scrollIntoView(flase)", ccl[7])
+        #self.driver.scroll(ccl[i+1], ccl[i]) to scroll until show ccl[7]
+        #self.driver.drag_and_drop(ccl[i+1], ccl[i]) to scroll until show ccl[7]
         #scroll_el1_to_el2(self.actions, ccl[7], ccl[0]) #TochAction not work on H5 page
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/cardlist", "bottom_"+NTIME+".png")
+
+        self.driver.execute_script("arguments[0].scrollIntoView(true)", ccl[0])
+        # Pull back to ccl[0] (card_intro) for test3
         
         assert len(ccl)==8 #Confirm credit card list has 8 subfunctions
 
     def test3_deadcard_type(self):
-        ccl=self.pe.credit_card_list()
-        self.driver.scroll(ccl[0], ccl[7])
-        ccl[0].click() #click card intro
-        self.driver.scroll(self.pe.dead_card(), self.pe.rcmd_card())
+        self.pe.card_intro().click()
+        self.driver.scroll(self.pe.dptm_card(), self.pe.rcmd_card())
+        #default right border (dptm_card) position to scroll to left border until show dead_card
         self.pe.dead_card().click()
+
         screenshot_count=0
         dcg=self.pe.dead_card_group()
-        
+        card_x=dcg[0].location['x'] #first card x-coordinate
+        card_y=dcg[0].location['y'] #first card y-coordinate, and y will be fixed
+        card_width=dcg[0].size['width'] #first card width
         for i in range(len(dcg)):
             sleep(3)
             NTIME=datetime.now().strftime(TIME_FORMAT)
@@ -70,7 +77,10 @@ class TestCathayApp:
             screenshot_count+=1
             
             if i<len(dcg)-1:
-                self.driver.scroll(dcg[i+1], dcg[i]) #next card scroll in screen
+                swipe_card(self.driver, card_x, card_width, card_y)
+                #self.driver.scroll(dcg[i+1], dcg[i]) 
+                #concept is the same, but not sure the element out of screen
+                dcg[i+1] #To check next card displayed (by inplicity wait)
             else:
                 break
         
