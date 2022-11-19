@@ -32,10 +32,12 @@ class TestCathayApp:
 
     def test1_homepage(self):
         self.driver.get("https://www.cathaybk.com.tw/cathaybk/")
-        self.getPage=is_exist(self.pe.login()) #other page elements AND logic should be True
+        flag=True 
+        #implicity wait for page loading completed, then executing next script
+        #After page loading completed, then it executes flag=True
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/homepage", "homepage_"+NTIME+".png")
-        assert self.getPage is True #Confirm homepage displayed
+        assert flag==True #Confirm homepage displayed
 
     def test2_credit_card_list(self):
         self.pe.menu().click()
@@ -43,30 +45,35 @@ class TestCathayApp:
         self.pe.credit_card().click()
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/cardlist", "top_"+NTIME+".png")
+        
         ccl=self.pe.credit_card_list()
-        self.driver.drag_and_drop(ccl[0], ccl[7])
-        #scroll_el1_to_el2(self.actions, ccl[0], ccl[7]) #TochAction not work on H5 page
+        self.driver.scroll(ccl[7], ccl[0])
+        #scroll_el1_to_el2(self.actions, ccl[7], ccl[0]) #TochAction not work on H5 page
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/cardlist", "bottom_"+NTIME+".png")
+        
         assert len(ccl)==8 #Confirm credit card list has 8 subfunctions
 
     def test3_deadcard_type(self):
         ccl=self.pe.credit_card_list()
-        self.driver.drag_and_drop(ccl[7], ccl[0])
+        self.driver.scroll(ccl[0], ccl[7])
         ccl[0].click() #click card intro
-        self.driver.drag_and_drop(self.pe.rcmd_card(), self.pe.dead_card())
+        self.driver.scroll(self.pe.dead_card(), self.pe.rcmd_card())
         self.pe.dead_card().click()
         screenshot_count=0
         dcg=self.pe.dead_card_group()
+        
         for i in range(len(dcg)):
             sleep(3)
             NTIME=datetime.now().strftime(TIME_FORMAT)
             screenshot(self.driver, "./screenshot/cardgroup", str(i+1)+"_"+NTIME+".png")
             screenshot_count+=1
+            
             if i<len(dcg)-1:
-                self.driver.drag_and_drop(dcg[i], dcg[i+1])
+                self.driver.scroll(dcg[i+1], dcg[i]) #next card scroll in screen
             else:
                 break
+        
         assert screenshot_count==len(dcg) #Confirm screenshot num equal to dead card num
 
 if __name__=="__main__":
