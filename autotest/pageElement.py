@@ -4,9 +4,6 @@ class PageElement:
 
     def __init__(self, driver):
         self.driver=driver
-
-    def login(self):
-        return self.driver.find_element(By.XPATH, "//input[@id='lblLoginText']")
     
     def menu(self):
         return self.driver.find_element(By.XPATH, "//a[@class='cubre-a-burger']")
@@ -40,6 +37,9 @@ class PageElement:
 
     def rcmd_card(self):
         return self.driver.find_element(By.XPATH, "//p[text()='推薦卡片']")
+
+    def dptm_card(self):
+        return self.driver.find_element(By.XPATH, "//p[text()='百貨購物']")
 
     def dead_card(self):
         return self.driver.find_element(By.XPATH, "//p[text()='停發卡']")
