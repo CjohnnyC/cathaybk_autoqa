@@ -66,11 +66,3 @@ class PageElement:
                 "self.driver.find_element(By.XPATH, '//img[@id=\"img_76FB9CA0074844B8B2871BF9BDD09DFB\"]')",
         ]
         return dcg
-
-
-
-    def search(self):
-        return self.driver.find_element(By.XPATH,'//input[@class="gLFyf"]')
-
-    def login(self):
-        return self.driver.find_element(By.XPATH, '//input[@id="lblLoginText"]')
