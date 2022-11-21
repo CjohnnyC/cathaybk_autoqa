@@ -60,29 +60,39 @@ class TestCathayApp:
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/cardlist", "top_"+NTIME+".png")
         
-        #scroll to top by each credit card list element, until the target element displayed 
-        subcount=js_vertical_scroll_top(self.driver, self.ccl)
+        #eval can NOT be packaged to another function, scroll by each element
+        count=0
+        while True:
+            try:
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", eval(self.ccl[count]))
+                count+=1
+            except:
+                break
         '''
         self.driver.scroll(ccl[i+1], ccl[i]) to scroll until show ccl[7]
         self.driver.drag_and_drop(ccl[i+1], ccl[i]) to scroll until show ccl[7]
         scroll_el1_to_el2(self.actions, ccl[7], ccl[0]) #TochAction not work on H5 page
         '''
-
-        all_sub_count=len(self.ccl)
+        all_func_count=len(self.ccl)
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/cardlist", "bottom_"+NTIME+".png")
-        #print(subcount)
         
-        #Confirm credit card list subfunction count is correct
-        assert subcount==all_sub_count 
+        #count should be the same as number of ccl elements
+        assert count==all_func_count
 
     def test3_deadcard_type(self):
         #pull back to card_intro
         self.driver.execute_script("arguments[0].scrollIntoView(true)", self.pe.card_intro())
         self.pe.card_intro().click()
 
-        #horizontal scroll each card intro list element until dead card is displayed 
-        horizontal_scroll_each(self.driver, self.cil)
+        #The same reason, eval can NOT be packaged to another function
+        count=0
+        while True:
+            try:
+                self.driver.scroll(eval(self.cil[count+1]), eval(self.cil[count]))
+                count+=1
+            except:
+                break
         '''
         self.driver.scroll(self.pe.dptm_card(), self.pe.rcmd_card())
         self.driver.scroll(self.pe.csld_card(), self.pe.dptm_card())
@@ -95,7 +105,8 @@ class TestCathayApp:
         eval(self.dcg[0])
         all_cards_count=len(self.dcg)
         for i in range(all_cards_count):
-            sleep(1) #To force seperate the time of getting screenshot
+            #To force seperate the time of getting screenshot
+            sleep(1)
             NTIME=datetime.now().strftime(TIME_FORMAT)
             screenshot(self.driver, "./screenshot/cardgroup", str(i+1)+"_"+NTIME+".png")
             screenshot_count+=1
@@ -119,5 +130,5 @@ class TestCathayApp:
 if __name__=="__main__":
     NTIME=datetime.now().strftime(TIME_FORMAT)
     html_report=file_path("./report", "result_"+NTIME+".html")
-    pytest.main(["-s", "-v", ".", "--html="+html_report])
+    pytest.main(["-v", ".", "--html="+html_report])
     #export html report
