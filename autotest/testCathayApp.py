@@ -113,14 +113,14 @@ class TestCathayApp:
             
             #swipe card by each one
             if i < all_cards_count-1:
-                swipe_left_right(self.driver, 0.95, 0.05, 0.5)
+                if i < all_cards_count-1:
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", eval(self.dcg[i+1]))
                 '''
+                swipe_left_right(self.driver, 0.95, 0.05, 0.5)
                 (sx=0.95) -> (ex=0.05) horizontal scroll screen from 95%->5% screen width
                 #(sy=0.5) anchor sy at 50% of screen height
                 #scroll_el1_to_el2(actions, dcg[i+1], dcg[i]) by TouchAction, but not sure the element out of screen
                 '''
-                
-                eval(self.dcg[i+1])
             else:
                 break
 
