@@ -15,7 +15,8 @@ def is_exist(page_element):
         flag=False
         return flag
 
-def js_vertical_scroll_top(driver, elements_list):
+'''
+def vertical_scroll_each(driver, elements_list):
     count=0
     while True:
         try:
@@ -34,6 +35,7 @@ def horizontal_scroll_each(driver, elements_list):
         except:
             break
     return count
+'''
 
 def file_path(dir, file):
     Path(dir).mkdir(parents=True, exist_ok=True) 
