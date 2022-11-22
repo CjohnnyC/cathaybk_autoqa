@@ -6,6 +6,15 @@ TIME_FORMAT="%Y%m%d_%H%M%S"
 #Above NTIME need to call each time, can not package it or the time will be the same
 '''
 
+def file_path(dir, file):
+    Path(dir).mkdir(parents=True, exist_ok=True) 
+    wholepath=Path(dir)/Path(file)
+    return str(wholepath)
+
+def screenshot(driver, dir, file):
+    driver.get_screenshot_as_file(file_path(dir, file))
+
+'''
 def is_exist(page_element):
     flag=True
     try:
@@ -14,6 +23,7 @@ def is_exist(page_element):
     except:
         flag=False
         return flag
+'''
 
 '''
 def vertical_scroll_each(driver, elements_list):
@@ -37,18 +47,9 @@ def horizontal_scroll_each(driver, elements_list):
     return count
 '''
 
-def file_path(dir, file):
-    Path(dir).mkdir(parents=True, exist_ok=True) 
-    wholepath=Path(dir)/Path(file)
-    return str(wholepath)
-
-def screenshot(driver, dir, file):
-    driver.get_screenshot_as_file(file_path(dir, file))
-
 '''
 def scroll_el1_to_el2(actions, el1, el2):
     actions.press(el1).move_to(el2).release().perform()
-'''
 
 def get_size(driver):
     x=driver.get_window_size()["width"]
@@ -68,3 +69,4 @@ def swipe_left_right(driver,sx_ratio,ex_ratio,y_ratio,t):
     ex=int(s[0]*ex_ratio)
     y=int(s[1]*y_ratio)
     driver.swipe(sx,y,ex,y,t)
+'''
