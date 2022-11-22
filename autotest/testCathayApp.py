@@ -7,6 +7,7 @@ from time import sleep
 #Self defined configuration and page object
 from appConfig import CAPS
 from pageElement import PageElement
+from logConfig import *
 
 #Self defined functions
 from selfFunctions import *
@@ -26,7 +27,7 @@ class TestCathayApp:
         cls.ccl=cls.pe.credit_card_list()
         cls.cil=cls.pe.card_intro_list()
         cls.dcg=cls.pe.dead_card_list()
-
+        
     @classmethod
     def teardown_class(cls): 
         cls.driver.quit()
@@ -61,24 +62,25 @@ class TestCathayApp:
         screenshot(self.driver, "./screenshot/cardlist", "top_"+NTIME+".png")
         
         #eval can NOT be packaged to another function, scroll by each element
-        count=0
+        ccl_count=0
         while True:
             try:
-                self.driver.execute_script("arguments[0].scrollIntoView(true);", eval(self.ccl[count]))
-                count+=1
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", eval(self.ccl[ccl_count]))
+                ccl_count+=1
             except:
+                logging.info("credit card list subfunction count = "+str(ccl_count))
                 break
         '''
-        self.driver.scroll(ccl[i+1], ccl[i]) to scroll until show ccl[7]
-        self.driver.drag_and_drop(ccl[i+1], ccl[i]) to scroll until show ccl[7]
-        scroll_el1_to_el2(self.actions, ccl[7], ccl[0]) #TochAction not work on H5 page
+        scroll(ccl[i+1], ccl[i])
+        drag_and_drop(ccl[i+1], ccl[i])
+        scroll_el1_to_el2(self.actions, ccl[i+1], ccl[i]) TochAction not work on H5 page
         '''
         all_func_count=len(self.ccl)
         NTIME=datetime.now().strftime(TIME_FORMAT)
         screenshot(self.driver, "./screenshot/cardlist", "bottom_"+NTIME+".png")
         
         #count should be the same as number of ccl elements
-        assert count==all_func_count
+        assert ccl_count==all_func_count
 
     def test3_deadcard_type(self):
         #pull back to card_intro
@@ -86,12 +88,14 @@ class TestCathayApp:
         self.pe.card_intro().click()
 
         #The same reason, eval can NOT be packaged to another function
-        count=0
+        cil_count=0
         while True:
             try:
-                self.driver.scroll(eval(self.cil[count+1]), eval(self.cil[count]))
-                count+=1
+                self.driver.scroll(eval(self.cil[cil_count+1]), eval(self.cil[cil_count]))
+                cil_count+=1
             except:
+                cil_count+=1 
+                logging.info("card intro list count = "+str(cil_count))
                 break
         '''
         self.driver.scroll(self.pe.dptm_card(), self.pe.rcmd_card())
@@ -112,16 +116,18 @@ class TestCathayApp:
             screenshot_count+=1
             
             #swipe card by each one
-            if i < all_cards_count-1:
-                if i < all_cards_count-1:
-                self.driver.execute_script("arguments[0].scrollIntoView(true);", eval(self.dcg[i+1]))
+            try:
+                self.driver.execute_script(
+                    'arguments[0].scrollIntoView({behavior:"auto", block:"center", inline:"center"});', 
+                    eval(self.dcg[i+1]))
                 '''
                 swipe_left_right(self.driver, 0.95, 0.05, 0.5)
                 (sx=0.95) -> (ex=0.05) horizontal scroll screen from 95%->5% screen width
                 #(sy=0.5) anchor sy at 50% of screen height
                 #scroll_el1_to_el2(actions, dcg[i+1], dcg[i]) by TouchAction, but not sure the element out of screen
                 '''
-            else:
+            except:
+                logging.info("dead card screenshot count = "+str(screenshot_count))
                 break
 
         #Confirm screenshot num equal to dead card num
