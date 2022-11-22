@@ -11,7 +11,6 @@ for i in range(1, rebound_times+1):
 
 tenth_rebound=rebound_height(default_height, rebound_times)
 all_traverse=all_rebound*(1+1/rebound_ratio)-tenth_rebound
-#all_rebound=sum
 
 print("All traverse height(except 10th rebound) is "+str(all_traverse)+" cm")
 print("The 10th rebound height is "+str(tenth_rebound)+" cm")
