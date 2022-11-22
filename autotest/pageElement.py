@@ -14,6 +14,8 @@ class PageElement:
     def credit_card(self):
         return self.driver.find_element(By.XPATH, '//div[@class="cubre-a-menuSortBtn"][text()="信用卡"]')
 
+    #If the element can not record first when getting page
+    #It needs to set the code as string, when executing test execute by eval(element)
     def credit_card_list(self):
         ccl=[
                 "self.driver.find_element(By.XPATH, '//a[text()=\"卡片介紹\"]')",
